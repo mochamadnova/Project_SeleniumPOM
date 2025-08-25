@@ -1,47 +1,57 @@
+// ...existing code...
 package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class LoginPage extends BasePage {
-    // Lokator-field & tombol
-    private final By usernameInput = By.id("username");
-    private final By passwordInput = By.id("password");
-    private final By loginButton   = By.cssSelector("button[type='submit']");
-    private final By flashMessage  = By.id("flash");
+import java.time.Duration;
+
+public class LoginPage {
+    private final WebDriver driver;
+    private final WebDriverWait wait;
+
+    private final By usernameField = By.id("user-name");
+    private final By passwordField = By.id("password");
+    private final By loginButton = By.id("login-button");
+    private final By inventoryContainer = By.id("inventory_container");
 
     public LoginPage(WebDriver driver) {
-        super(driver);
+        this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(5));
     }
 
-    public LoginPage open(String baseUrl) {
-        driver.get(baseUrl + "/login");
+    public LoginPage open(String url) {
+        driver.get(url);
         return this;
     }
 
     public LoginPage setUsername(String username) {
-        type(usernameInput, username);
+        driver.findElement(usernameField).clear();
+        driver.findElement(usernameField).sendKeys(username);
         return this;
     }
 
     public LoginPage setPassword(String password) {
-        type(passwordInput, password);
+        driver.findElement(passwordField).clear();
+        driver.findElement(passwordField).sendKeys(password);
         return this;
     }
 
-    public SecureAreaPage submitValid() {
-        click(loginButton);
-        // Bila valid, diarahkan ke /secure
-        return new SecureAreaPage(driver);
-    }
-
-    public LoginPage submitInvalid() {
-        click(loginButton);
-        // Tetap di halaman login (flash error)
+    public LoginPage submitValid() {
+        driver.findElement(loginButton).click();
         return this;
     }
 
-    public String getFlashMessage() {
-        return getText(flashMessage).trim();
+    // Tambahkan method ini — mengembalikan true jika elemen dashboard muncul
+    public boolean isDashboardVisible() {
+        try {
+            WebElement el = wait.until(ExpectedConditions.visibilityOfElementLocated(inventoryContainer));
+            return el.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
