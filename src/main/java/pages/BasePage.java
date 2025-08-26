@@ -1,26 +1,25 @@
 package pages;
 
-import org.openqa.selenium.*;
+import io.qameta.allure.Step;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import utils.Config;
+import java.time.Duration;
 
-public class BasePage {
-    protected WebDriver driver;
-    protected WebDriverWait wait;
+public abstract class BasePage {
+    protected final WebDriver driver;
+    protected final WebDriverWait wait;
 
-    public BasePage(WebDriver driver) {
+    protected BasePage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Config.explicitWait());
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     protected WebElement waitVisible(By locator) {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-    }
-
-    protected void click(By locator) {
-        waitVisible(locator).click();
     }
 
     protected void type(By locator, String text) {
@@ -29,11 +28,12 @@ public class BasePage {
         el.sendKeys(text);
     }
 
-    protected String getText(By locator) {
-        return waitVisible(locator).getText();
+    protected void click(By locator) {
+        wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
     }
 
-    public String getCurrentUrl() {
-        return driver.getCurrentUrl();
+    @Step("Open URL: {url}")
+    public void open(String url) {
+        driver.get(url);
     }
 }
