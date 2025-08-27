@@ -1,44 +1,40 @@
 package pages;
 
-import io.qameta.allure.Step;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 public class LoginPage extends BasePage {
-    private final By usernameField = By.id("user-name");
-    private final By passwordField = By.id("password");
-    private final By loginButton   = By.id("login-button");
-    private final By errorMessage  = By.cssSelector("h3[data-test='error']");
 
     public LoginPage(WebDriver driver) {
         super(driver);
     }
 
-    @Step("Input username: {username}")
-    public LoginPage setUsername(String username) {
-        type(usernameField, username);
-        return this;
+    @FindBy(id = "user-name")
+    WebElement usernameInput;
+
+    @FindBy(id = "password")
+    WebElement passwordInput;
+
+    @FindBy(id = "login-button")
+    WebElement loginButton;
+
+    @FindBy(css = ".title")
+    WebElement productsTitle;
+
+    public void enterUsername(String username) {
+        usernameInput.sendKeys(username);
     }
 
-    @Step("Input password: ******")
-    public LoginPage setPassword(String password) {
-        type(passwordField, password);
-        return this;
+    public void enterPassword(String password) {
+        passwordInput.sendKeys(password);
     }
 
-    @Step("Click Login")
-    public InventoryPage clickLoginSuccess() {
-        click(loginButton);
-        return new InventoryPage(driver);
+    public void clickLogin() {
+        loginButton.click();
     }
 
-    @Step("Click Login expect error")
-    public LoginPage clickLoginExpectError() {
-        click(loginButton);
-        return this;
-    }
-
-    public String getErrorText() {
-        return waitVisible(errorMessage).getText();
+    public boolean isLoginSuccessful() {
+        return productsTitle.isDisplayed();
     }
 }
