@@ -25,7 +25,7 @@ public class BaseTest {
         extent = new ExtentReports();
         extent.attachReporter(htmlReporter);
         extent.setSystemInfo("Project", "Saucedemo Automation");
-        extent.setSystemInfo("Tester", "QA Engineer");
+        extent.setSystemInfo("Tester", "Mochamad Nova Setyawan");
     }
 
     @BeforeEach
