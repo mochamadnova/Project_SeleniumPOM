@@ -13,7 +13,7 @@ public class LoginPage extends BasePage {
     @FindBy(id = "user-name")
     WebElement usernameInput;
 
-    @FindBy(id = "password")
+    @FindBy(id = "passworddd")
     WebElement passwordInput;
 
     @FindBy(id = "login-button")
