@@ -1,17 +1,25 @@
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import pages.LoginPage;
+import pages.ProductPage;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.TestMethodOrder;
+
 import com.aventstack.extentreports.Status;
 
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class LoginTest extends BaseTest {
 
+    @Order(1)
     @Test
-    public void testValidLogin() {
+    public void ValidLogin() {
         test = extent.createTest("Login dengan kredensial valid",
                 "Verifikasi user bisa login dengan akun standard_user");
 
         LoginPage loginPage = new LoginPage(driver);
+        ProductPage productPage = new ProductPage(driver);
 
         test.log(Status.INFO, "Step 1: Masukkan username");
         loginPage.enterUsername("standard_user");
@@ -23,7 +31,7 @@ public class LoginTest extends BaseTest {
         loginPage.clickLogin();
 
         test.log(Status.INFO, "Step 4: Verifikasi halaman Products muncul");
-        boolean result = loginPage.isLoginSuccessful();
+        boolean result = productPage.productsTitle();
 
         if (result) {
             test.log(Status.PASS, "Login berhasil - halaman Products tampil");
@@ -34,12 +42,14 @@ public class LoginTest extends BaseTest {
         Assertions.assertTrue(result);
     }
 
+    @Order(2)
     @Test
-    public void testInvalidLogin() {
+    public void InvalidLogin() {
         test = extent.createTest("Login dengan kredensial tidak valid",
                 "Verifikasi user tidak bisa login dengan akun yang salah");
 
         LoginPage loginPage = new LoginPage(driver);
+        ProductPage productPage = new ProductPage(driver);
 
         test.log(Status.INFO, "Step 1: Masukkan username");
         loginPage.enterUsername("invalid_user");
@@ -51,7 +61,7 @@ public class LoginTest extends BaseTest {
         loginPage.clickLogin();
 
         test.log(Status.INFO, "Step 4: Verifikasi halaman Products tidak muncul");
-        boolean result = loginPage.isLoginSuccessful();
+        boolean result = productPage.productsTitle();
 
         String errorText = loginPage.ErrorMessage();
         test.log(Status.PASS, "Terdapat error message = " + errorText);
@@ -65,12 +75,14 @@ public class LoginTest extends BaseTest {
         Assertions.assertFalse(result);
     }
 
+    @Order(3)
     @Test
-    public void testEmptyUsername() {
+    public void EmptyUsername() {
         test = extent.createTest("Login dengan username kosong",
                 "Verifikasi user tidak bisa login tanpa memasukkan username");
 
         LoginPage loginPage = new LoginPage(driver);
+        ProductPage productPage = new ProductPage(driver);
 
         test.log(Status.INFO, "Step 1: Biarkan username kosong");
 
@@ -81,7 +93,7 @@ public class LoginTest extends BaseTest {
         loginPage.clickLogin();
 
         test.log(Status.INFO, "Step 4: Verifikasi halaman Products tidak muncul");
-        boolean result = loginPage.isLoginSuccessful();
+        boolean result = productPage.productsTitle();
 
         String errorText = loginPage.ErrorMessage();
         test.log(Status.PASS, "Terdapat error message = " + errorText);
@@ -95,12 +107,14 @@ public class LoginTest extends BaseTest {
         Assertions.assertFalse(result);
     }
 
+    @Order(4)
     @Test
-    public void testEmptyPassword() {
+    public void EmptyPassword() {
         test = extent.createTest("Login dengan password kosong",
                 "Verifikasi user tidak bisa login tanpa memasukkan password");
 
         LoginPage loginPage = new LoginPage(driver);
+        ProductPage productPage = new ProductPage(driver);
 
         test.log(Status.INFO, "Step 1: Masukkan username");
         loginPage.enterUsername("standard_user");
@@ -111,7 +125,7 @@ public class LoginTest extends BaseTest {
         loginPage.clickLogin();
 
         test.log(Status.INFO, "Step 4: Verifikasi halaman Products tidak muncul");
-        boolean result = loginPage.isLoginSuccessful();
+        boolean result = productPage.productsTitle();
 
         String errorText = loginPage.ErrorMessage();
         test.log(Status.PASS, "Terdapat error message = " + errorText);
