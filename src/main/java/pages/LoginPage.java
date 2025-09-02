@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -23,6 +24,9 @@ public class LoginPage extends BasePage {
     @FindBy(css = "h3[data-test='error']")
     WebElement errorMessage;
 
+    @FindBy(className = "login_logo")
+    WebElement logo_login;
+
     public void enterUsername(String username) {
         field_username.sendKeys(username);
     }
@@ -38,5 +42,19 @@ public class LoginPage extends BasePage {
     public String ErrorMessage() {
         errorMessage.isDisplayed();
         return errorMessage.getText();
+    }
+
+    public void login(String username, String password) {
+        enterUsername(username);
+        enterPassword(password);
+        clickLogin();
+    }
+
+    public boolean loginlogo() {
+        try {
+                return logo_login.isDisplayed();
+            } catch (NoSuchElementException e) {
+                return false;
+        }
     }
 }
