@@ -163,7 +163,7 @@ public class LoginTest extends BaseTest {
         if (result) {
             test.log(Status.PASS, "Logout berhasil, halaman Login tampil");
         } else {
-            test.log(Status.FAIL, "Logout gagal, halaman Login tidak ditemukan");
+            test.log(Status.FAIL, "Logout gagal, halaman Login tidak ditemukan!");
         }
 
         Assertions.assertTrue(result);
